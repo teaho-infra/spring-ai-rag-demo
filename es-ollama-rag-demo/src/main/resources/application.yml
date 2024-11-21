@@ -1,0 +1,21 @@
+spring:
+  ai:
+    vectorstore:
+      pgvector:
+        dimensions: 768
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: qwen:1.8b
+      embedding:
+        model: nomic-embed-text:v1.5
+server:
+  port: 22260
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
