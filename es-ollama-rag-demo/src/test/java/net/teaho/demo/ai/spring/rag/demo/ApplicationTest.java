@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  */
 @SpringBootTest
 @Slf4j
-public class EsOllamaRagDemoApplicationTest {
+public class ApplicationTest {
 
     @Autowired
     OllamaChatModel ollamaChatModel;
@@ -22,4 +22,9 @@ public class EsOllamaRagDemoApplicationTest {
     public void testOllamaChat() {
         log.info("chat result: {}", ollamaChatModel.call("hello"));
     }
+
+
+
+
+
 }
