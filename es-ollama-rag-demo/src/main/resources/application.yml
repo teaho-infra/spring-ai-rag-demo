@@ -1,15 +1,21 @@
 spring:
+  elasticsearch:
+    uris: localhost:9200
+    username: elastic
+    password: 222222
+    connection-timeout: 1s
+    socket-timeout: 15s
   ai:
     vectorstore:
-      pgvector:
-        dimensions: 768
+      elasticsearch:
+        initialize-schema: true
+        dimensions: 1536
     ollama:
       base-url: http://localhost:11434
       chat:
         model: qwen:1.8b
       embedding:
         model: nomic-embed-text:v1.5
-server:
   port: 22260
 springdoc:
   swagger-ui:
