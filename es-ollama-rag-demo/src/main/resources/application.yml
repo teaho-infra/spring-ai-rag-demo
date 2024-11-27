@@ -1,6 +1,8 @@
+server:
+  port: 22260
 spring:
   elasticsearch:
-    uris: localhost:9200
+    uris: http://localhost:9200
     username: elastic
     password: 222222
     connection-timeout: 1s
@@ -9,14 +11,14 @@ spring:
     vectorstore:
       elasticsearch:
         initialize-schema: true
-        dimensions: 1536
+        dimensions: 768
+        index-name: vector-index2
     ollama:
       base-url: http://localhost:11434
       chat:
-        model: qwen:1.8b
+        model: llama3.2:latest
       embedding:
         model: nomic-embed-text:v1.5
-  port: 22260
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
