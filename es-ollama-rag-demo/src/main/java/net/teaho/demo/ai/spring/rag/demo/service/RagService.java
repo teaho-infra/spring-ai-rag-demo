@@ -1,9 +1,11 @@
 package net.teaho.demo.ai.spring.rag.demo.service;
 
+import com.rometools.rome.feed.synd.SyndEntry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.teaho.demo.ai.spring.rag.demo.domain.DocmentDTO;
 import net.teaho.demo.ai.spring.rag.demo.domain.RagDTO;
+import net.teaho.demo.ai.spring.rag.demo.processor.RssProcessor;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.document.DefaultContentFormatter;
 import org.springframework.ai.document.Document;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author teaho2015<at>gmail.com
@@ -32,6 +35,7 @@ public class RagService {
 
     private final VectorStore vectorStore;
     private final OllamaChatModel ollamaChatModel;
+    private final RssProcessor rssProcessor;
 
     public void parsingDocToFile(MultipartFile file) {
         Resource resource = file.getResource();
@@ -44,6 +48,30 @@ public class RagService {
         if (!CollectionUtils.isEmpty(docs)) {
             vectorStore.add(docs);
         }
+    }
+
+    public void load() throws Exception {
+
+        String rss36kr = "";
+        List<SyndEntry> rssFeedContent = rssProcessor.fetchRssFeed(rss36kr);
+        List<Document> docs = new ArrayList<>();
+
+        for (SyndEntry syndEntry : rssFeedContent) {
+            Document document = Document.builder().withId(UUID.randomUUID().toString())
+                .withContent(syndEntry.getTitle() + "\n" + syndEntry.getDescription().getValue())
+                .withMetadata("uri", syndEntry.getUri())
+                .withMetadata("source", syndEntry.getSource().getTitle())
+                .build();
+
+            docs.add(document);
+        }
+        ContentFormatTransformer contentFormatTransformer = new ContentFormatTransformer(DefaultContentFormatter.defaultConfig());
+        TokenTextSplitter tokenTextSplitter = new TokenTextSplitter(1000, 400, 10, 5000, true);
+        docs = tokenTextSplitter.split(contentFormatTransformer.transform(docs));
+        if (!CollectionUtils.isEmpty(docs)) {
+            vectorStore.add(docs);
+        }
+
     }
 
     public List<Document> searchVectorDB(String query, int topK) {

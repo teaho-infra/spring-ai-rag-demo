@@ -39,6 +39,15 @@ public class RagController {
 		return result;
 	}
 
+	@Operation(summary = "rss upload")
+	@GetMapping("/rss/load")
+	public Object loadRss() throws Exception {
+		ragService.load();
+		Map<String, Object> result = new HashMap<>();
+		result.put("success", true);
+		return result;
+	}
+
 	@Operation(summary = "search vector doc")
 	@GetMapping("/search")
 	public List<Document> searchDoc(@RequestParam String query, @RequestParam(defaultValue = "3") int topK) {
@@ -56,6 +65,7 @@ public class RagController {
 	public Object chatWithRag(@RequestParam String message) {
 		return ragService.easyRag(message);
 	}
+
 
 
 }
