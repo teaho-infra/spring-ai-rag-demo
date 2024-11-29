@@ -1,0 +1,25 @@
+server:
+  port: 22261
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/pv
+    username: pv
+    password: 22222222
+  ai:
+    vectorstore:
+      pgvector:
+        dimensions: 768
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: llama3.2:latest
+      embedding:
+        model: nomic-embed-text:v1.5
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
