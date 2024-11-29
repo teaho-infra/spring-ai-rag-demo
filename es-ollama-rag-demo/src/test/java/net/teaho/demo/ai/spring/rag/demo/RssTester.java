@@ -16,12 +16,10 @@ import java.util.UUID;
  * @author teaho2015<at>gmail.com
  * @date 2024-11
  */
-@SpringBootTest
 @Slf4j
 public class RssTester {
 
-    @Autowired
-    private RssProcessor rssProcessor;
+    private RssProcessor rssProcessor = new RssProcessor();
 
     @Test
     public void testRss() throws Exception {
@@ -33,11 +31,13 @@ public class RssTester {
 
         for (SyndEntry syndEntry : rssFeed) {
             Document document = Document.builder().withId(UUID.randomUUID().toString())
-                .withContent(syndEntry.getDescription())
+                .withContent(syndEntry.getTitle() + "\n" + syndEntry.getDescription().getValue())
+                .withMetadata("uri", syndEntry.getUri())
+                .withMetadata("source", syndEntry.getSource().getTitle())
+                .build();
 
+            docs.add(document);
         }
-
-
         log.info(rssFeed.toString());
     }
 
