@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,5 +41,28 @@ public class RssTester {
         }
         log.info(rssFeed.toString());
     }
+
+    @Test
+    public void testHuxiuRss() throws Exception {
+
+        List<SyndEntry> rssFeed = rssProcessor.fetchRssFeed("https://rss.huxiu.com/");
+        //        List<SyndEntry> rssFeed = rssProcessor.fetchRssFeed("https://36kr.com/feed");
+
+        List<Document> docs = new ArrayList<>();
+
+        for (SyndEntry syndEntry : rssFeed) {
+            Document document = Document.builder().withId(UUID.randomUUID().toString())
+                .withContent(syndEntry.getTitle() + "\n" + syndEntry.getDescription().getValue())
+                .withMetadata("uri", syndEntry.getUri())
+                .withMetadata("source", StringUtils.hasText(syndEntry.getAuthor()) ? syndEntry.getAuthor() : syndEntry.getSource().getTitle())
+                .build();
+
+            docs.add(document);
+        }
+        log.info(rssFeed.toString());
+    }
+
+
+
 
 }

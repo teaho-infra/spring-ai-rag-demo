@@ -6,12 +6,9 @@ import net.teaho.demo.ai.spring.rag.demo.service.RagService;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +39,7 @@ public class RagController {
 	@Operation(summary = "rss upload")
 	@GetMapping("/rss/load")
 	public Object loadRss() throws Exception {
-		ragService.load();
+		ragService.loadRss();
 		Map<String, Object> result = new HashMap<>();
 		result.put("success", true);
 		return result;
